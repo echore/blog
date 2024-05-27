@@ -2,16 +2,16 @@
 title: Quartz
 ---
 
--> [PRESET](https://github.com/ObsidianPublisher/plugin-presets):
+-> [PRESET](https://github.com/Enveloppe/plugin-presets):
 
-- [YAML based](https://github.com/ObsidianPublisher/plugin-presets/blob/main/presets/quartz-yaml-based.json)
-- [Obsidian path based](https://github.com/ObsidianPublisher/plugin-presets/blob/main/presets/quartz-yaml-based.json)
+- [YAML based](https://github.com/Enveloppe/plugin-presets/blob/main/presets/quartz-yaml-based.json)
+- [Obsidian path based](https://github.com/Enveloppe/plugin-presets/blob/main/presets/quartz-yaml-based.json)
 
 ## [Quartz](https://quartz.jzhao.xyz/)
 
 See the official documentation on how to configure Quartz.
 
-For the template, a special template that add a "little" more features is available [here](https://github.com/ObsidianPublisher/Publisher-Quartz).
+For the template, a special template that add a "little" more features is available [here](https://github.com/Enveloppe/Enveloppe-Quartz).
 
 The template includes:
 
@@ -22,7 +22,7 @@ The template includes:
 
 ### File & Folder icons configuration
 
-- Use [Iconize Assistant](https://github.com/Lisandra-dev/iconize-assistant) to save icon path into the frontmatter of the file.
+- Use [Iconize Assistant](https://github.com/mara-li/iconize-assistant) to save icon path into the frontmatter of the file.
   > [!note] Iconize icons needs to be accessible by the plugin! I store them into `_assets/PLUGINS/icons`.
 - Configure the plugin to send icons file (using override attachment) into `quartz/static/icons` : Replace path of attachment for svg files: `/(_assets\/_PLUGINS\/icons)\/(.*)\/(.*)\.(svg)$/`->`quartz/static/icons/$2/{{name}}`
 - Configure the plugin to send file by frontmatter key: `icon_file`
