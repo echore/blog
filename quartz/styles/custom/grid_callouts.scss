@@ -115,7 +115,7 @@ body {
 
 /** ---- WIKI & INFOBOX ---- **/
 
-.callout[data-callout$="wiki"],
+.callout[data-callout~="wiki"],
 .callout[data-callout~="infobox"] {
   --callout-color: var(--interactive-accent-rgb);
   background: var(--note, var(--background-primary));
@@ -124,7 +124,7 @@ body {
   margin: 0;
   margin: 0 8px;
   width: 30vh;
-  float: right;
+  float: left;
   padding: 1px;
   border: 1px solid var(--table, var(--background-modifier-border));
   border-radius: var(--radius, var(--co-radius));
@@ -165,9 +165,8 @@ body {
 
   img {
     margin: auto;
-    padding: auto;
     text-align: center;
-    border-radius: 0% !important;
+    border-radius: 0 !important;
   }
 
   &[data-callout-metadata~="left"] {
@@ -177,8 +176,8 @@ body {
     }
   }
 
-  .wiki-left & {
-    float: left;
+  .wiki-right & {
+    float: right;
   }
 
   .is-collapsed {
@@ -213,7 +212,7 @@ body {
       border: 0;
     }
   }
-  @media all and (max-width: $mobileBreakpoint) {
+  @media all and ($mobile) {
     width: 100% !important;
     float: none !important;
     display: block !important;
@@ -224,15 +223,7 @@ body {
 
 /** Specific WIKI callouts **/
 
-.callout[data-callout="lwiki"] {
-  float: left !important;
-}
-
-.callout[data-callout*="border"] {
-  border: 1px solid var(--lightgray);
-}
-
-.callout[data-callout$="wiki"] {
+.callout[data-callout~="wiki"] {
   table thead tr {
     display: none;
   }
@@ -262,7 +253,6 @@ body {
   border: 0;
   margin: 0;
   box-shadow: none;
-  width: $pageWidth;
 
   & {
     display: block;
@@ -276,19 +266,20 @@ body {
     }
 
     p:not(.callout-title) {
-      display: grid;
-      grid-template-columns: 2fr;
-      grid-template-rows: repeat(1, 1fr);
-      grid-gap: 15px;
+      display: flex;
+      margin-block-start: 0;
+      margin-block-end: 0;
+      justify-content: center;
     }
 
     img {
+      display: table-cell;
+      vertical-align: middle;
       padding: 1px;
-      margin: 0;
-      grid-row: x / span y;
+      max-height: 35vh;
 
-      &:hover {
-        transform: scaleX(2) scaleY(2);
+      &[alt="wfull"] {
+        max-height: unset;
       }
     }
 
@@ -371,14 +362,15 @@ body {
   }
 
   table {
+    th {
+      background-color: var(--aside-bg, rgba(var(--callout-color), 0.5));
+    }
+
     --tbl-td-h: 0;
     --tbl-td-w: 5px;
     white-space: nowrap;
     margin: 0;
     width: 100%;
-    th {
-      background-color: var(--aside-bg, rgba(var(--callout-color), 0.5));
-    }
   }
 
   p:last-child {
@@ -399,9 +391,7 @@ body {
     border: 0;
     text-align: center;
     padding: 0;
-    padding: 0px;
-    margin: auto;
-    overflow-y: hidden;
+
     &.is-collapsible:not(.is-collapsed) {
       display: flex;
       flex-direction: row-reverse;
@@ -424,6 +414,10 @@ body {
         }
       }
     }
+
+    padding: 0px;
+    margin: auto;
+    overflow-y: hidden;
 
     &:is([data-callout-metadata~="tbl-cln"], [data-callout-metadata~="table-clean"]) {
       table :is(td, tr, th) {

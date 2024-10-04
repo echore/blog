@@ -46,23 +46,31 @@
 
 .mobile-only.explorer {
   #explorer-content {
-    width: 90vw;
-    background-color: var(--light);
-    position: absolute;
-    z-index: 100;
-    max-height: max-content !important;
-    transition: all 500ms ease;
-    overflow: hidden;
+    &:not(.collapsed) {
+      width: 90vw;
+      background-color: var(--light);
+      height: 90dvh;
+      position: absolute;
+      z-index: 100;
+      max-height: max-content !important;
+      transition: all 300ms ease;
+      overflow: hidden;
+      top: 10dvh;
+    }
+
+    /* ul.overflow {
+      max-height: 70dvh;
+    } */
 
     &.collapsed {
       left: 0;
       width: 0;
       background-color: var(--light);
-      height: 100dvh;
+      height: 90dvh;
       position: absolute;
+      max-height: max-content !important;
       z-index: 100;
-      filter: blur(150px);
-      transition: all 500ms ease-out;
+      transition: all 300ms ease-in-out;
     }
   }
 

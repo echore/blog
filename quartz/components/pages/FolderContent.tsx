@@ -1,13 +1,13 @@
-import { Root } from "hast"
+import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } from "../types"
 import path from "path"
 
-import { i18n } from "../../i18n"
-import { htmlToJsx } from "../../util/jsx"
-import { classNames } from "../../util/lang"
-import { simplifySlug, stripSlashes } from "../../util/path"
-import { PageList, SortFn } from "../PageList"
 import style from "../styles/listPage.scss"
-import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } from "../types"
+import { PageList, SortFn } from "../PageList"
+import { stripSlashes, simplifySlug } from "../../util/path"
+import { Root } from "hast"
+import { classNames } from "../../util/lang"
+import { htmlToJsx } from "../../util/jsx"
+import { i18n } from "../../i18n"
 
 interface FolderContentOptions {
   /**
@@ -43,28 +43,25 @@ export default ((opts?: Partial<FolderContentOptions>) => {
     }
 
     const content =
-      (tree as Root).children.length === 0 ? undefined : htmlToJsx(fileData.filePath!, tree)
-    const descFontmatter = fileData.frontmatter?.description
-    const descContent = content ? content : descFontmatter
+      (tree as Root).children.length === 0
+        ? fileData.description
+        : htmlToJsx(fileData.filePath!, tree)
+
     return (
       <div class={classNames(undefined, "popover-hint", ...cssClasses)}>
-        <article>
-          <p>{descContent}</p>
-        </article>
-        {(!content || content?.props?.children?.length === 0) && (
-          <div class="page-listing">
-            {options.showFolderCount && (
-              <p>
-                {i18n(cfg.locale).pages.folderContent.itemsUnderFolder({
-                  count: allPagesInFolder.length,
-                })}
-              </p>
-            )}
-            <div>
-              <PageList {...listProps} />
-            </div>
+        <article>{content}</article>
+        <div class="page-listing">
+          {options.showFolderCount && (
+            <p>
+              {i18n(cfg.locale).pages.folderContent.itemsUnderFolder({
+                count: allPagesInFolder.length,
+              })}
+            </p>
+          )}
+          <div>
+            <PageList {...listProps} />
           </div>
-        )}
+        </div>
       </div>
     )
   }

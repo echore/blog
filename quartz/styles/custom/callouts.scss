@@ -55,14 +55,15 @@
   }
 
   &[data-callout="empty"] {
-    --callout-icon: "" --color: transparent;
+    --callout-icon: "";
+    --color: transparent;
     --border: transparent;
     --bg: transparent;
-    width: 50px;
-    padding: 5px;
     & .callout-title {
       display: none;
     }
+    width: 50px;
+    padding: 5px;
   }
 
   &[data-callout="dice"] {
