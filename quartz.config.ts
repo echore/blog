@@ -8,14 +8,14 @@ import * as Plugin from "./quartz/plugins"
  */
 const config: QuartzConfig = {
   configuration: {
-    pageTitle: "📔Harvey's Blog",
+    pageTitle: "🪴 Quartz 4.0",
     enableSPA: true,
     enablePopovers: true,
     analytics: {
-      provider: 'umami', host: 'https://cloud.umami.is/script.js', websiteId: '9ac4cee8-5463-4237-a88b-f993b1099387',
+      provider: "plausible",
     },
     locale: "en-US",
-    baseUrl: "www.h4rvey.com",
+    baseUrl: "quartz.jzhao.xyz",
     ignorePatterns: ["private", "templates", ".obsidian"],
     defaultDateType: "created",
     theme: {
