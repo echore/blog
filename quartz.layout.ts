@@ -29,10 +29,26 @@ export const sharedPageComponents: SharedLayout = {
   ],
   footer: Component.Footer({
     links: {
-      GitHub: "https://github.com/jackyzha0/quartz",
-      "Discord Community": "https://discord.gg/cRFFHYye7t",
+      GitHub: "https://github.com/h4rvey-g",
+      "Email": "mailto:howieguo8@outlook.com",
     },
   }),
+  afterBody: [
+    Component.Comments({
+      provider: 'giscus',
+      options: {
+      // from data-repo
+        repo: 'h4rvey-g/Note-Blog',
+      // from data-repo-id
+        repoId: 'R_kgDOMMkbLg',
+      // from data-category
+        category: 'Announcements',
+      // from data-category-id
+        categoryId: 'DIC_kwDOMMkbLs4CkQkL',
+        inputPosition: 'top'
+      }
+    }),
+  ],
 }
 
 // components for pages that display a single page (e.g. a single note)
