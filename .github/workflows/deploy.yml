@@ -34,7 +34,7 @@ jobs:
         run: pnpm import
       - uses: actions/setup-node@v4
         with:
-          node-version: 18.14
+          node-version: 22
           cache: "pnpm"
       - name: Fetch submodules
         continue-on-error: true
