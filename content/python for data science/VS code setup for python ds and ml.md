@@ -1,7 +1,7 @@
 ---
 share: true
 ---
-P## The video:
+## The video:
 https://youtu.be/6i3e-j3wSf0?si=seMW3DMKqk7OaVZV
 * This one is clear, step by step. However like the title said"Python Tutorial for Beginners with VS Code", it is not specific for data science, if you just wanna start to learn python instantly, it is the video you wanna check out.
 https://youtu.be/mpk4Q5feWaw?si=yiBVhOOpdtnKsWN_
