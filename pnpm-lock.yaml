@@ -217,8 +217,8 @@ importers:
         specifier: ^0.21.4
         version: 0.21.5
       prettier:
-        specifier: ^3.3.0
-        version: 3.3.2
+        specifier: ^3.4.2
+        version: 3.4.2
       tsx:
         specifier: ^4.11.2
         version: 4.15.7
@@ -1945,8 +1945,8 @@ packages:
   preact@10.22.0:
     resolution: {integrity: sha512-RRurnSjJPj4rp5K6XoP45Ui33ncb7e4H7WiOHVpjbkvqvA3U+N8Z6Qbo0AE6leGYBV66n8EhEaFixvIu3SkxFw==}
 
-  prettier@3.3.2:
-    resolution: {integrity: sha512-rAVeHYMcv8ATV5d508CFdn+8/pHPpXeIid1DdrPwXnaAdH7cqjVbpJaT5eq4yRAFU/lsbwYwSF/n5iNrdJHPQA==}
+  prettier@3.4.2:
+    resolution: {integrity: sha512-e9MewbtFo+Fevyuxn/4rrcDAaq0IYxPGLvObpQjiZBMAzB9IGmzlnG9RZy3FFas+eBMu2vA0CszMeduow5dIuQ==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -4508,7 +4508,7 @@ snapshots:
 
   preact@10.22.0: {}
 
-  prettier@3.3.2: {}
+  prettier@3.4.2: {}
 
   pretty-bytes@6.1.1: {}
 
