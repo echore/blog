@@ -1,5 +1,5 @@
 ---
-title: d
+title: Great Resources
 share: true
 ---
 
