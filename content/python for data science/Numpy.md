@@ -97,3 +97,126 @@ np.array([True]).dtype      # bool
 # Specify dtype
 np.array([1,2], dtype='float32')
 ```
+
+## NumPy Indexing and Selection
+#### Broadcast
+**What it is:** NumPy's ability to perform _element-wise operations_ on arrays of **different shapes** by _virtually expanding_ smaller arrays to match larger ones.
+Arrays are compatible for broadcasting if their dimensions are **either equal or one of them is 1** when aligned from the **trailing (rightmost) dimension**.
+
+|Operation|Shape A|Shape B|Works?|Why?|
+|---|---|---|---|---|
+|`(3,) + (1,)`|(3)|(1)|✅|B stretches to (3)|
+|`(3,2) + (2,)`|(3,2)|(2)|✅|B becomes (1,2) → (3,2)|
+|`(3,3) + (4,)`|(3,3)|(4)|❌|3 ≠ 4|
+```python
+arr = np.arange(0,11)
+arr
+slice_of_arr = arr[0:6]
+slice_of_arr[:]=99 # Now note the changes also occur in our original array!
+arr_copy = arr.copy() # Safe to modify independently
+```
+- When you slice `slice_of_arr = arr[0:6]`, you're **NOT** getting a new array. You're getting a _window_ into the original array's memory
+-  `arr_copy = arr.copy()` makes a full duplicate in new memory
+#### Indexing a 2D array (matrices)
+The general format is arr_2d`[row][col]`or arr_2d`[row,col]`. I recommend using the comma notation for clarity.
+```python
+arr_2d = np.array(([5,10,15],[20,25,30],[35,40,45]))
+arr_2d[1] #Indexing row
+arr_2d[0,1]
+arr_2d[:2,1:]
+arr_2d[2,:]
+```
+
+#### Conditional Selection
+**What is Conditional Selection?**
+It’s the ability to **select elements from an array** based on a **boolean condition**. Think of it as a "filter" that only lets through values that meet your criteria.
+```python
+arr = np.arange(1,11)
+arr > 4
+bool_arr = arr>4
+arr[bool_arr]
+arr[arr>2] # or we can just use this
+```
+
+**Common Pitfalls**
+1. **Chaining Conditions Without Parentheses:**
+``` python
+# Wrong:
+mask = arr > 2 & arr < 8  # ❌ Python evaluates `2 & arr` first!
+
+# Correct:
+mask = (arr > 2) & (arr < 8)  # ✅
+```
+2. **Modifying Original Data:**
+`filtered_arr = arr[arr > 5].copy()`
+
+Small question:
+Use numpy to check how many rolls were greater than 2. For example if dice_rolls=`[1,2,3]` then the answer is 1.
+```python
+import numpy as np
+dice_rolls = np.array([3, 1, 5, 2, 5, 1, 1, 5, 1, 4, 2, 1, 4, 5, 3, 4, 5, 2, 4, 2, 6, 6, 3, 6, 2, 3, 5, 6, 5])
+total_rolls_over_two = len(dice_rolls[dice_rolls>2])
+```
+
+## Numpy operation
+####  1. Mathematical Operations
+
+NumPy supports **element-wise operations**, meaning operations are applied to each element individually.
+
+ Key Operations:
+
+- **Arithmetic:** `+`, `-`, `*`, `/`, `**` (power)
+    
+- **Trigonometric:** `np.sin()`, `np.cos()`, `np.tan()`
+    
+- **Exponential/Logarithmic:** `np.exp()`, `np.log()`
+```python
+arr = np.array([1, 2, 3])
+
+# Element-wise operations
+squared = arr ** 2  # [1, 4, 9]
+sqrt = np.sqrt(arr)  # [1.0, 1.414, 1.732]
+```
+
+#### 2. Statistical Operations
+
+NumPy makes it easy to compute descriptive statistics.
+
+Key Functions:
+
+- `np.mean()`, `np.median()`, `np.std()` (standard deviation)
+    
+- `np.min()`, `np.max()`, `np.sum()`
+```python
+arr = np.array([1, 2, 3, 4, 5])
+
+# Statistics
+mean = np.mean(arr)  # 3.0
+std_dev = np.std(arr)  # 1.414
+total = np.sum(arr)  # 15
+```
+#### 3. Axis Logic
+Let's break down **axis logic** in NumPy with your 2D array example. Imagine axis 0 as **vertical movement** (up/down rows) and axis 1 as **horizontal movement** (left/right columns). Think of it like navigating a spreadsheet:
+```python
+import numpy as np
+
+arr_2d = np.array([
+    [1, 2, 3, 4],   # Row 0 (axis 0)
+    [5, 6, 7, 8],   # Row 1 (axis 0)
+    [9, 10, 11, 12] # Row 2 (axis 0)
+])
+# Columns: 0  1   2   3 (axis 1)
+```
+`arr_2d.sum(axis=0)` :Sums values **vertically** (along rows) for each column.
+summing along axis 0 collapses the rows, keeping the columns. 
+
+ Maybe like stacking books vertically. Each row is a shelf, and summing vertically adds the books in each position across shelves.
+ 
+Axis 1 (Columns): Collapse columns, keep rows.
+
+
+#### Exercise
+![[Pasted image 20250127182007.png|Pasted image 20250127182007.png]]
+to have this kind of output:
+![[Pasted image 20250127182046.png|Pasted image 20250127182046.png]]
+`mat[:3,1:2]`
