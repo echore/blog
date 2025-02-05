@@ -66,6 +66,10 @@ df['Tip Quality'] = df[['total_bill', 'tip']].apply(lambda df: quality(df['total
     
     - Saves the result into a new column named `"Tip Quality"`.
 
+1. **`.apply()` should be used row-wise for multiple columns**
+    
+    - The `apply()` function by default applies the function to each column, **not rows**.
+    - Since `quality()` needs both `total_bill` and `tip` from the same row, you must use `.apply()` **along `axis=1`**.
 #### **Using `np.vectorize()` for faster execution**
 
 ```python
@@ -109,6 +113,13 @@ df[['total_bill', 'tip']].corr()
 ```
 
 🔍 **Insight:** Shows relationships between numerical columns.
+#### What is Correlation?
+
+- Correlation measures the **strength** and **direction** of the relationship between two numerical variables.
+- The value of correlation **ranges from -1 to 1**:
+    - **+1** → Perfect positive correlation (as one increases, the other increases).
+    - **0** → No correlation (variables are independent).
+    - **-1** → Perfect negative correlation (as one increases, the other decreases).
 
 ---
 
@@ -134,16 +145,6 @@ df['sex'].value_counts()
 
 ---
 
-## 🔄 `.replace()` – Replace Values
-
-```python
-df['Tip Quality'].replace(to_replace='Other', value='Ok', inplace=True)
-```
-
-🚀 **Use case:** Quickly replace specific values in a DataFrame.
-
----
-
 ## 🔍 `.unique()` and `.nunique()` – Find Unique Values
 
 ```python
@@ -155,6 +156,16 @@ df['size'].nunique()  # Count of unique values
 
 ---
 
+## 🔄 `.replace()` – Replace Values
+
+```python
+df['Tip Quality'].replace(to_replace='Other', value='Ok', inplace=True)
+```
+
+🚀 **Use case:** Quickly replace specific values in a DataFrame. Just a few items
+
+---
+
 ## 🎭 `.map()` – Value Mapping
 
 ```python
@@ -162,7 +173,7 @@ my_map = {'Dinner': 'D', 'Lunch': 'L'}
 df['time'].map(my_map)
 ```
 
-📌 **Use case:** Convert categorical values into abbreviated forms.
+📌 **Use case:** Convert categorical values into abbreviated forms.  For many items
 
 ---
 
@@ -174,6 +185,9 @@ df.drop_duplicates(inplace=True)  # Remove duplicate rows
 ```
 
 📌 **Use case:** Clean dataset by removing duplicate entries.
+It returns a **Boolean Series**, where:
+- `False` means the row is **not** a duplicate (i.e., it appears for the first time).
+- `True` means the row is a **duplicate** (i.e., it has appeared before in the DataFrame).
 
 ---
 
