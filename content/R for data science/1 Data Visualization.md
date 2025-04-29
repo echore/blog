@@ -2,6 +2,105 @@
 share: true
 ---
 
+
+In **ggplot2**, the function call `aes()` stands for **aesthetic mapping**—it’s how you tell ggplot **which variables in your data** should control **which visual properties** of the plot.
+
+---
+
+### 1. What “aesthetics” can you map?
+
+|Aesthetic|Inside `aes()` you’d write…|What it does|
+|---|---|---|
+|x‐position|`aes(x = some_variable)`|Puts points along the horizontal axis|
+|y‐position|`aes(y = some_variable)`|Puts points along the vertical axis|
+|color|`aes(colour = some_variable)`|Varies point colors by levels or values|
+|size|`aes(size = some_variable)`|Varies point size by values|
+|shape|`aes(shape = some_variable)`|Uses different point shapes for categories|
+|fill|`aes(fill = some_variable)`|Fills shapes (e.g. bars) with variable‐driven color|
+
+Anything you want driven **by your data** goes **inside** `aes()`.
+
+---
+
+### 2. Inside vs. outside `aes()`
+
+- **Inside `aes()`** → **data‐driven**
+    
+    ```r
+    geom_point(aes(colour = species, size = cty))
+    ```
+    
+    “Colour each point by its species; size each point by the `cty` value.”
+    
+- **Outside `aes()`** → **fixed setting**
+    
+    ```r
+    geom_point(aes(colour = species), size = 3, alpha = 0.7)
+    ```
+    
+    “Colour by species, but make _every_ point size 3 and 70% opaque.”
+    
+
+---
+
+### 3. Why is it necessary?
+
+Without `aes()`, ggplot has no instruction about **which column** should control **which visual channel**. It would just plot all points in default color and size:
+
+```r
+# No aes: every point identical
+ggplot(mpg) +
+  geom_point()  
+```
+
+By adding `aes(x, y)`, you map your data onto the axes:
+
+```r
+ggplot(mpg, aes(x = hwy, y = displ)) +
+  geom_point()
+```
+
+Now each point’s horizontal position comes from `hwy` and vertical from `displ`.
+
+---
+
+### 4. Common mistake: mapping the wrong type
+
+```r
+geom_point(aes(shape = cty))
+```
+
+If `cty` is continuous (many unique numbers), you’ll get:
+
+> ✖ A continuous variable cannot be mapped to the shape aesthetic.
+
+Because **shapes** are discrete categories—only a handful of glyphs are available. To fix, either:
+
+- Remove shape mapping
+    
+- Convert to factor: `aes(shape = factor(cty))`
+    
+- Or use a different aesthetic (e.g., `size`)
+    
+
+---
+
+### 5. Quick recipe
+
+1. **Decide** which variable you want to control a visual property.
+    
+2. **Put** that mapping inside `aes()`.
+    
+3. **Set** any constant styling (size, alpha, color overrides) **outside** `aes()`.
+    
+
+---
+
+**Key takeaway:**
+
+> **`aes()` is the wiring harness between your raw data and the visual elements of your plot.** Without it, ggplot doesn’t know _what_ drives _where_ or _how_ to draw.
+
+
 ### 🖼️ **Plot 1 – Multiple Lines (One per Species)**
 ![[Pasted image 20250424165936.png|Pasted image 20250424165936.png]]
 
@@ -224,6 +323,7 @@ Use `labs(caption = "…")`, for example:
 ---
 
 ### 8. Recreate this visualization
+![[Pasted image 20250425211114.png|Pasted image 20250425211114.png]]
 
 > **Task**: scatterplot of _body_mass_g_ vs _flipper_length_mm_, colored by _bill_depth_mm_, with a smooth curve.
 
@@ -317,4 +417,184 @@ ggplot() +
     
 - **Global vs. per-layer** `data`/`aes` is purely syntactic—plots only care about the final mapping.
 
-## 1.3 ggplot2 calls
+## 1.4 Visualizing distributions
+### 1.4.1 A categorical variable
+A variable is **categorical** if it can only take one of a small set of values. To examine the distribution of a categorical variable, you can use a bar chart. 
+![[Pasted image 20250425211829.png|Pasted image 20250425211829.png]]
+
+```
+ggplot(penguins, aes(x = species)) +
+  geom_bar()
+```
+
+
+t’s often preferable to reorder the bars based on their frequencies. Doing so requires transforming the variable to a factor (how R handles categorical data) and then reordering the levels of that factor.
+`fct_infreq()`  It **reorders a factor** based on **how often** each level occurs.
+![[Pasted image 20250425212150.png|Pasted image 20250425212150.png]]
+```
+ggplot(penguins,aes(x = fct_infreq(species) )) +
+  geom_bar()
+```
+
+
+### 1.4.2 A numerical variable
+
+One commonly used visualization for distributions of continuous variables is a histogram.
+You should always explore a variety of binwidths when working with histograms, as different binwidths can reveal different patterns
+
+![[Pasted image 20250425212356.png|Pasted image 20250425212356.png]]
+```
+ggplot(penguins,aes(x=body_mass_g)) +
+  geom_histogram()
+```
+
+An alternative visualization for distributions of numerical variables is a density plot.
+![[Pasted image 20250425212700.png|Pasted image 20250425212700.png]]
+```r
+ggplot(penguins,aes(x=body_mass_g)) +
+  geom_density()
+```
+
+### 1.4.3 Exercises
+How are the following two plots different? Which aesthetic, `color` or `fill`, is more useful for changing the color of bars?
+![[Pasted image 20250425212904.png|Pasted image 20250425212904.png]]
+
+```r
+ggplot(penguins, aes(x = species)) +
+  geom_bar(color = "red")
+```
+
+![[Pasted image 20250425212919.png|Pasted image 20250425212919.png]]
+```r
+ggplot(penguins, aes(x = species)) +
+  geom_bar(fill = "red")
+```
+
+## 1.5 Visualizing relationships
+### 1.5.1 A numerical and a categorical variable
+A **boxplot** is a type of visual shorthand for measures of position (percentiles) that describe a distribution.
+```r
+ggplot(penguins,aes(x=species,y=body_mass_g)) +
+  geom_boxplot()
+```
+![[Pasted image 20250428222504.png|Pasted image 20250428222504.png]]
+
+Alternatively, we can make density plots with `[geom_density()]
+```
+ggplot(penguins,aes(x=body_mass_g,colour = species, fill = species)) +
+  geom_density(alpha=0.5)
+```
+
+![[Pasted image 20250428222515.png]]
+
+### 1.5.2 Two categorical variables
+
+We can use stacked bar plots to visualize the relationship between two categorical variables.
+
+```r
+ggplot(penguins,aes(x=island,fill=species)) +
+  geom_bar()
+```
+![[Pasted image 20250428222758.png]]
+The second plot, a relative frequency plot
+```r
+ggplot(penguins,aes(x=island,fill=species)) +
+  geom_bar(position='fill')
+```
+![[Pasted image 20250428222928.png]]
+### 1.5.3 Two numerical variables
+
+A scatterplot is probably the most commonly used plot for visualizing the relationship between two numerical variables.
+
+```r
+ggplot(penguins, aes(x = flipper_length_mm, y = body_mass_g)) +
+  geom_point()
+```
+
+
+Another way, which is particularly useful for categorical variables, is to split your plot into **facets**, subplots that each display one subset of the data.
+
+To facet your plot by a single variable, use `[facet_wrap()]`. The first argument of `[facet_wrap()]` is a formula, which you create with `~` followed by a variable name. The variable that you pass to `[facet_wrap()]` should be categorical.
+
+```r
+ggplot(penguins,aes(x=flipper_length_mm,y=body_mass_g)) +
+  geom_point(aes(colour = species,shape = species)) +
+  facet_wrap(~island)
+```
+![[Pasted image 20250428223808.png]]
+
+Why does the following yield two separate legends? How would you fix it to combine the two legends?
+
+```r
+ggplot(
+  data = penguins,
+  mapping = aes(
+    x = bill_length_mm, y = bill_depth_mm, 
+    color = species, shape = species
+  )
+) +
+  geom_point() +
+  labs(color = "Species")
+```
+
+In **ggplot2**, each _aesthetic_ (colour, shape, size, fill, etc.) gets its own scale—and by default its own legend—because under the hood you have separate scales called `scale_colour_discrete()` and `scale_shape_discrete()`. Even if they’re mapped to the same variable, ggplot keeps them separate unless you explicitly give them the **same name** (and breaks).
+
+---
+
+## Why you got two legends
+
+- You mapped **species** to both **colour** and **shape**.
+    
+- You only renamed the **colour** legend via `labs(colour = "Species")`.
+    
+- The **shape** scale was still using its default title (“species”), so ggplot treated them as _two distinct legends_.
+    
+
+---
+
+## How to merge them
+
+You just need to give **both** scales the **exact same name**. ggplot will then automatically collapse them into a single legend:
+
+```r
+ggplot(penguins, aes(
+  x      = bill_length_mm,
+  y      = bill_depth_mm,
+  colour = species,
+  shape  = species
+)) +
+  geom_point() +
+  labs(
+    colour = "Species",
+    shape  = "Species"
+  )
+```
+
+or equivalently
+
+```r
+ggplot(penguins, aes(bill_length_mm, bill_depth_mm,
+                     colour = species, shape = species)) +
+  geom_point() +
+  scale_colour_discrete(name = "Species") +
+  scale_shape_discrete(name  = "Species")
+```
+
+### What happens here
+
+1. **Both** legends now have the title **“Species”**.
+    
+2. ggplot sees the same title and identical breaks (the same factor levels) on two discrete scales.
+    
+3. It **merges** them into one combined legend showing both the colour swatches and the shape glyphs under the single heading “Species.”
+    
+
+---
+
+## Quick recap
+
+- **Separate legends** appear whenever you map a variable to two different aesthetics but give them **different scale names**.
+    
+- **To combine legends**, give both scales **the same name** (via `labs()`, `scale_*_discrete(name=…)`, or `guides()`).
+    
+
