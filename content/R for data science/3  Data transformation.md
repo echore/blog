@@ -275,3 +275,140 @@ flights %>%
   select(any_of(variables))
 ```
 
+## 3.5 Groups
+### 3.5.1 `group_by()`
+
+```r
+flights %>% 
+  group_by(month)
+```
+`group_by()` doesn’t change the data but, if you look closely at the output, you’ll notice that the output indicates that it is “grouped by” month
+
+### 3.5.2 `summarize()`
+one very useful summary is `n()`, which returns the number of rows in each group:
+```r
+flights %>% 
+  group_by(month) %>% 
+  summarise(avg_delay = mean(dep_delay,na.rm = TRUE),
+            n = n())
+```
+
+### 3.5.3 The `slice_` functions
+There are five handy functions that allow you to extract specific rows within each group:
+
+- `df |> slice_head(n = 1)` takes the first row from each group.
+- `df |> slice_tail(n = 1)` takes the last row in each group.
+- `df |> slice_min(x, n = 1)` takes the row with the smallest value of column `x`.
+- `df |> slice_max(x, n = 1)` takes the row with the largest value of column `x`.
+- `df |> slice_sample(n = 1)` takes one random row.
+
+You can vary `n` to select more than one row, or instead of `n =`, you can use `prop = 0.1` to select (e.g.) 10% of the rows in each group. For example, the following code finds the flights that are most delayed upon arrival at each destination:
+```r
+flights %>% 
+  group_by(dest) %>% 
+  slice_max(arr_delay,n=1) %>% 
+  relocate(dest,arr_delay)
+```
+
+why 108 rows for 105 destinations?
+
+Because of **tied values** — multiple rows **within a group** (i.e., within the same `dest`) can **share the same maximum `arr_delay`**.
+
+### 3.5.5 Ungrouping
+what happens when you summarize an ungrouped data frame:
+You get a single row back because dplyr treats all the rows in an ungrouped data frame as belonging to one group.
+
+### 3.5.6 `.by`
+
+dplyr 1.1.0 includes a new, experimental, syntax for per-operation grouping, the `.by` argument. `group_by()` and `ungroup()` aren’t going away, but you can now also use the `.by` argument to group within a single operation:
+```r
+flights %>% 
+  summarise(
+    delay = mean(dep_delay,na.rm=TRUE),
+    n = n(),
+    .by = month
+  )
+```
+
+### 3.5.7 Exercises
+
+1. Which carrier has the worst average delays?
+```r
+flights %>% 
+  group_by(carrier) %>% 
+  summarise(
+    delay = mean(dep_delay,na.rm=TRUE),
+  ) %>% 
+  arrange(desc(delay))
+```
+
+2.  Find the flights that are most delayed upon departure from each destination.
+```r
+flights %>%
+  group_by(dest) %>%
+  slice_max(dep_delay, n = 1) %>%
+  relocate(dest)
+```
+
+3.  How do delays vary over the course of the day? Illustrate your answer with a plot.
+```r
+flights %>% 
+  group_by(hour) %>% 
+  summarise(avg_depdelay = mean(dep_delay,na.rm = TRUE)) %>% 
+  ggplot(aes(x = hour,y = avg_depdelay)) +
+  geom_smooth()
+```
+
+4. Explain what count() does in terms of the dplyr verbs you just learned. What does the sort argument to count() do?
+🔧 What `count()` Does
+
+The `count()` function is actually a **shortcut** for a combination of `group_by()` + `summarise(n = n())`:
+
+```r
+df %>% 
+  group_by(variable) %>% 
+  summarise(n = n())
+```
+
+So this:
+
+```r
+count(df, variable)
+```
+
+is equivalent to:
+
+```r
+df %>% 
+  group_by(variable) %>% 
+  summarise(n = n())
+```
+
+It counts how many rows fall into each unique value of `variable`.
+
+ 🧹 What `sort = TRUE` Does
+
+By default, `count()` returns the results in **the order that the groups appear** in the data. But when you add `sort = TRUE`, it **automatically arranges the output from the most common group to the least** — that is, it sorts the result by `n` in descending order:
+
+```r
+count(df, variable, sort = TRUE)
+```
+
+is like doing:
+
+```r
+df %>% 
+  group_by(variable) %>% 
+  summarise(n = n()) %>%
+  arrange(desc(n))
+```
+
+---
+
+✅ Example
+
+```r
+flights %>% count(dest, sort = TRUE)
+```
+
+→ Tells you **which destinations had the most flights**, sorted from most to least.
