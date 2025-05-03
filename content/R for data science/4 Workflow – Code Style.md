@@ -1,6 +1,5 @@
 ---
 share: true
-date: 2025-05-03
 ---
 
 > _Good code style is like good punctuation: not required, but essential for readability and collaboration._
