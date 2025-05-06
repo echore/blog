@@ -285,3 +285,66 @@ Because you want **different pieces of the original column names to become diffe
 ---
 
 ## 5.4 Widening data
+
+So far we’ve used pivot_longer() to solve the common class of problems where values have ended up in column names. Next we’ll pivot (HA HA) to pivot_wider(), which makes datasets wider by increasing columns and reducing rows and helps when one observation is spread across multiple rows. This seems to arise less commonly in the wild, but it does seem to crop up a lot when dealing with **governmental data.**
+```r
+cms_patient_experience
+#> # A tibble: 500 × 5
+#>   org_pac_id org_nm                     measure_cd   measure_title   prf_rate
+#>   <chr>      <chr>                      <chr>        <chr>              <dbl>
+#> 1 0446157747 USC CARE MEDICAL GROUP INC CAHPS_GRP_1  CAHPS for MIPS…       63
+#> 2 0446157747 USC CARE MEDICAL GROUP INC CAHPS_GRP_2  CAHPS for MIPS…       87
+#> 3 0446157747 USC CARE MEDICAL GROUP INC CAHPS_GRP_3  CAHPS for MIPS…       86
+#> 4 0446157747 USC CARE MEDICAL GROUP INC CAHPS_GRP_5  CAHPS for MIPS…       57
+#> 5 0446157747 USC CARE MEDICAL GROUP INC CAHPS_GRP_8  CAHPS for MIPS…       85
+#> 6 0446157747 USC CARE MEDICAL GROUP INC CAHPS_GRP_12 CAHPS for MIPS…       24
+#> # ℹ 494 more rows
+```
+
+```r
+cms_patient_experience %>% 
+  pivot_wider(
+    id_cols = starts_with('org'), 
+    names_from = measure_cd,
+    values_from = prf_rate
+  )
+```
+
+`id_cols = starts_with("org")`
+
+This tells R:
+
+> “Keep `org_pac_id` and `org_nm` as **identifiers** — don’t pivot them.”
+
+Because you don’t want org names or IDs turning into new columns — they should stay on the left, like "row headers".
+
+`names_from = measure_cd`
+
+This tells R:
+
+> “Use the unique values in `measure_cd` as the **names of new columns**.”
+
+So `CAHPS_GRP_1`, `CAHPS_GRP_2`, `CAHPS_GRP_3`... become **new column names**.
+
+
+### 5.4.1 How does `pivot_wider()` work?
+I am confused by this sentence, so I ask gpt to explain it for me:
+By default, the rows in the output are determined by all the variables that aren’t going into the new names or values. These are called the `id_cols`
+
+#### 🤔 So… what should stay as the “row identifier” (`id_cols`)?
+
+The rule is:
+
+> **Any column that is not involved in `names_from` or `values_from` is used to group rows together — it defines one row in the new wide table.**
+
+In this case:
+
+- `measurement` becomes column **names**
+    
+- `value` becomes column **values**
+    
+- So **`id` is left over** → it becomes the `id_col` that defines the rows
+    
+
+That means each **unique `id` becomes a row** in the result
+
