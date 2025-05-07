@@ -1,11 +1,5 @@
 ---
 date: 2025-04-28
-tags:
-  - Python
-  - Pandas
-  - Seaborn
-  - Data
-  - Analysis
 share: true
 ---
 
