@@ -208,3 +208,248 @@ annoying %>%
     "three" = `3`
   )
 ```
+
+## 7.3 Controlling column types
+### 7.3.2 Missing values, column types, and problems
+
+The most common way column detection fails is that a column contains unexpected values, and you get a character column instead of a more specific type. One of the most common causes for this is a missing value, recorded using something other than the `NA` that readr expects.
+```r
+simple_csv <- "
+  x
+  10
+  .
+  20
+  30"
+
+df <- read_csv(simple_csv,col_types = cols(x = col_double())) #This forces R to try to read `x` as **double** (numeric with decimals).
+problems(df) 
+> problems(df)
+# A tibble: 1 × 5
+    row   col expected actual file                                                                  
+  <int> <int> <chr>    <chr>  <chr>                                                                 
+1     3     1 a double .      
+#This tells us that there was a problem in row 3, col 1 where readr expected a double but got a `.`. That suggests this dataset uses `.`
+df <- read_csv(simple_csv,na = '.')
+df
+```
+In this very small case, you can easily see the missing value `.`. But what happens if you have thousands of rows with only a few missing values represented by `.`s sprinkled among them? One approach is to tell readr that `x` is a numeric column, and then see where it fails.
+
+### 7.3.3 Column types
+By default, `read_csv()` **guesses** column types. But sometimes you want:
+
+- **all columns** to be one type (e.g. character),
+    
+- or to **override just a few**, leaving others default.
+```r
+another_csv <- "
+x,y,z
+1,2,3"
+
+read_csv(another_csv,col_types = cols(.default = col_character()))
+# A tibble: 1 × 3                                                                                   
+  x     y     z    
+  <chr> <chr> <chr>
+1 1     2     3    
+```
+This tells R: Treat **all columns** as characters unless I say otherwise.
+This is super useful when:
+
+- You're importing **dirty or inconsistent data**
+    
+- You want to **avoid auto-parsing errors** (e.g. converting ZIP codes like `"01234"` to numbers)
+    
+- You’re working with **IDs or codes** that look numeric but should stay as strings
+
+Another useful helper is `cols_only()` which will read in only the columns you specify:
+```r
+read_csv(another_csv,col_types = cols_only(x = col_character()))
+# A tibble: 1 × 1                                                                                   
+  x    
+  <chr>
+1 1 
+```
+`cols_only(): `**Only read in the columns you specify.**  All other columns are ignored entirely — they don’t even appear in the output.
+
+How Is It Different from `select()`?
+
+- `select()` drops columns _after_ the file has been read (i.e., after parsing all columns).
+    
+- `cols_only()` **prevents them from being read** in the first place — more efficient.
+
+## 7.4 Reading data from multiple files
+```r
+sales_files <- c(
+  "https://pos.it/r4ds-01-sales",
+  "https://pos.it/r4ds-02-sales",
+  "https://pos.it/r4ds-03-sales"
+)
+read_csv(sales_files, id = "file")
+```
+What Does `id = "file"` Do?
+
+It tells `read_csv()` to:
+
+1. **Add a new column** to your final tibble called `"file"`.
+    
+2. **Fill it with the file path** (or name) from which each row came.
+    
+
+This is **super helpful** when you want to:
+
+- Keep track of **data source** per row,
+    
+- Later do **grouped summaries** by file (e.g., total sales per month),
+    
+- Debug or trace back **inconsistencies** to specific files.
+
+---
+
+## 7.5 Writing to a file
+
+### CSV vs RDS vs Parquet in R
+
+#### 1. `write_csv()` / `read_csv()`
+
+**Best for:** Portability & sharing with others  
+**File type:** Plain text (CSV)
+
+Pros:
+
+- Human-readable
+    
+- Works across Excel, Python, etc.
+    
+- Easy to share via email or version control
+    
+ Cons:
+
+- Loses column type info (e.g., factors → characters)
+    
+- Must re-specify types (`col_types`) each time
+    
+- Slower for large data
+    
+
+```r
+write_csv(students, "students.csv")
+students2 <- read_csv("students.csv")
+```
+
+---
+
+#### 2. `write_rds()` / `read_rds()`
+
+**Best for:** Fast internal caching of R objects  
+**File type:** Binary (.rds)
+
+Pros:
+
+- Preserves all types (factors, dates, lists)
+    
+- Fast read/write
+    
+- Compact
+    
+ Cons:
+
+- R-specific (not readable outside R)
+    
+- Not human-readable
+    
+
+```r
+write_rds(students, "students.rds")
+students3 <- read_rds("students.rds")
+```
+
+---
+
+#### 3. `write_parquet()` / `read_parquet()` (via `arrow`)
+
+**Best for:** High-performance cross-platform analytics  
+**File type:** Binary (Parquet)
+
+Pros:
+
+- Retains full type info
+    
+- Cross-language support (Python, Spark, SQL, etc.)
+    
+- Highly compressed and fast
+    
+- Columnar format: ideal for big data
+    
+ Cons:
+
+- Requires `arrow` package
+    
+- Not human-readable
+    
+
+```r
+library(arrow)
+write_parquet(students, "students.parquet")
+students4 <- read_parquet("students.parquet")
+```
+
+---
+## 7.6 Data entry
+
+Sometimes, you don’t want to read from a file — you just want to **manually create a small dataset** (for testing, examples, teaching, etc.).
+
+Two helper functions for this:
+
+|Function|Layout style|Best for|
+|---|---|---|
+|`tibble()`|Column-wise|Programmers/data gen|
+|`tribble()`|Row-wise|Humans/data entry|
+
+`tibble()` — Column-Wise Data Entry
+
+```r
+tibble(
+  x = c(1, 2, 5), 
+  y = c("h", "m", "g"),
+  z = c(0.08, 0.83, 0.60)
+)
+#> # A tibble: 3 × 3
+#>       x y         z
+#>   <dbl> <chr> <dbl>
+#> 1     1 h      0.08
+#> 2     2 m      0.83
+#> 3     5 g      0.6
+```
+
+The result is a table with 3 rows and 3 columns.  
+But you have to **mentally line up the values across columns** to see each row.
+
+> Think of `tibble()` like defining **columns in a spreadsheet** first — one column at a time.
+
+
+`tribble()` — Row-Wise Data Entry
+
+```r
+tribble(
+  ~x, ~y, ~z,
+  1, "h", 0.08,
+  2, "m", 0.83,
+  5, "g", 0.60
+)
+#> # A tibble: 3 × 3
+#>       x y         z
+#>   <dbl> <chr> <dbl>
+#> 1     1 h      0.08
+#> 2     2 m      0.83
+#> 3     5 g      0.6
+```
+
+This says:
+
+- First row: `x = 1`, `y = "h"`, `z = 0.08`
+    
+- Second row: `x = 2`, `y = "m"`, `z = 0.83`
+    
+- ...
+
+Each row is laid out **visually and structurally as a row**, making it easier to read and maintain for small tables.
+
