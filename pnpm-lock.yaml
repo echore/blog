@@ -18,8 +18,8 @@ importers:
         specifier: 0.1.16
         version: 0.1.16
       '@tweenjs/tween.js':
-        specifier: ^21.0.0
-        version: 21.1.1
+        specifier: ^25.0.0
+        version: 25.0.0
       async-mutex:
         specifier: ^0.5.0
         version: 0.5.0
@@ -769,8 +769,8 @@ packages:
     resolution: {integrity: sha512-LtoMMhxAlorcGhmFYI+LhPgbPZCkgP6ra1YL604EeF6U98pLlQ3iWIGMdWSC+vWmPBWBNgmDBAhnAobLROJmwg==}
     engines: {node: '>=18'}
 
-  '@tweenjs/tween.js@21.1.1':
-    resolution: {integrity: sha512-O2GetAwEC/0MOiRb3lxCLIt/eeugoDPX0nu+1SFWLqGKf835ZdWsfM9RzDpjF+aKkpYMhvOnEhO+SxMnHHjpfw==}
+  '@tweenjs/tween.js@25.0.0':
+    resolution: {integrity: sha512-XKLA6syeBUaPzx4j3qwMqzzq+V4uo72BnlbOjmuljLrRqdsd3qnzvZZoxvMHZ23ndsRS4aufU6JOZYpCbU6T1A==}
 
   '@types/cli-spinner@0.2.3':
     resolution: {integrity: sha512-TMO6mWltW0lCu1de8DMRq9+59OP/tEjghS+rs8ZEQ2EgYP5yV3bGw0tS14TMyJGqFaoVChNvhkVzv9RC1UgX+w==}
@@ -2964,7 +2964,7 @@ snapshots:
 
   '@sindresorhus/merge-streams@2.3.0': {}
 
-  '@tweenjs/tween.js@21.1.1': {}
+  '@tweenjs/tween.js@25.0.0': {}
 
   '@types/cli-spinner@0.2.3':
     dependencies:
