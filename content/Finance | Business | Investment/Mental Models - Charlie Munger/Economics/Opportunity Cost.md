@@ -8,6 +8,7 @@ date: 2025-05-07
 **Opportunity cost**: the value of what you gave up when making that decision
 
 https://fs.blog/tradeoffs-decision-making/
+
 >If you’re young, you think you can go all out in your career, have fulfilling relationships, travel on a regular basis, keep up with reading and social media, go without sleep, take out unnecessary credit card debt, and start a family at the same time. The end result is always a total meltdown.“
  **The truth is, when you’re trying to get everything right, you’re getting nothing right.**
 
@@ -59,11 +60,11 @@ omg This hits me.
 
 https://www.stlouisfed.org/open-vault/2020/january/real-life-examples-opportunity-cost
 
-## The Scoop on Scarcity
+### The Scoop on Scarcity
 
 >We can’t have everything we want in life. This is where scarcity factors in. **Our unlimited wants are confronted by a limited supply of goods, services, time, money and opportunities.** This concept is what drives choices—and, by extension, costs and trade-offs
 
-## Costs That Are Seen and Unseen
+### Costs That Are Seen and Unseen
 >That’s why Caceres-Santamaria challenges us to consider not only **explicit alternatives**—the choices and costs present at the time of decision-making—but also **implicit alternatives**, which are “unseen” opportunity costs.
 
 >What are some other examples of opportunity cost?
@@ -81,6 +82,39 @@ like the examples here. The opportunity cost is **not just the money, but also t
 
 I especially like the car example. When we buy expensive things, we often feel a natural impulse to go for the “slightly more expensive” upgrade or accessory — it feels cheap _relative to the base price_. But from another angle, we should ask: **what else could we do with that upgrade money itself?** That same amount could be spent on something entirely different and possibly more valuable.
 
+---
+https://www.khanacademy.org/economics-finance-domain/ap-macroeconomics/basic-economics-concepts-macro/production-possibilities-curve-scarcity-choice-and-opportunity-cost-macro/v/production-possibilities-frontier
 
+#### Production Possibilities Curve
+![[Pasted image 20250509174823.png|Pasted image 20250509174823.png]]
+ 
+ It is really straightforword to watch this example, The A-F scenarios show the possibilities about how many rabbits and berries can be collected, and then a curve. The left side can be possible, you can sometimes be lazy not collect so much rabbits or berries, the right side is impossible.
 
+#### Opportunity cost
+ 
+![[Pasted image 20250509175813.png|Pasted image 20250509175813.png]]
 
+#### Increasing opportunity cost
+![[Pasted image 20250509180544.png|Pasted image 20250509180544.png]]
+
+As you can see, when F - A, the opportunity cost increases and the slope more and more negative. like the bowed shape.
+
+#### PPCs for increasing, decreasing and constant opportunity cost
+
+![[Pasted image 20250510143705.png|Pasted image 20250510143705.png]]
+
+I like the way to show one unit increase in rabbit, and the draw the line to illustrate how many berries will be decreased, then you can clearly see whether it's increasing opportunity cost or decreasing opportunity cost.
+
+####  Production Possibilities Curve as a model of a country's economy
+![[Pasted image 20250510144603.png|Pasted image 20250510144603.png]]
+
+Y X - efficient usage of resources  Z - Inefficiency A -  impossible unless we have more growth in lands tech etc.
+
+#### Lesson summary: Opportunity cost and the PPC
+The Production Possibilities Curve (PPC) is a model used to show the tradeoffs associated with allocating resources between the production of two goods. The PPC can be used to illustrate the concepts of scarcity, opportunity cost, efficiency, inefficiency, economic growth, and contractions.
+
+For example, suppose Carmen splits her time as a carpenter between making tables and building bookshelves. The PPC would show the maximum amount of either tables or bookshelves she could build given her current resources. The shape of the PPC would indicate whether she had increasing or constant opportunity costs.
+
+The PPC isn’t just about drawing curves — it’s about training my brain to think:
+
+**“Given limited resources, what trade-off am I really making — and is it the smartest one?”**
