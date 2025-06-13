@@ -82,6 +82,8 @@ Once Campus France approval is granted, you can book an appointment at VFS Globa
 - You’ll also receive email updates
 - Passport will be returned by **FedEx only** – make sure someone is home to receive and sign for it
 
+Good luck!
+
 ---
 
 
@@ -154,3 +156,5 @@ Checklist for long stay visa – Studies: [https://www.uae.campusfrance.org/syst
 - 可使用VFS提供的tracking number查看处理状态
 - 去VFS 不要带个人电脑 会被收10刀locker费用
 - 签证状态也会及时更新到你的邮箱，只能由Fedex寄送记得在家签收
+Good luck! 祝你好运🍀
+也不知道有无中国留子看见👀 
