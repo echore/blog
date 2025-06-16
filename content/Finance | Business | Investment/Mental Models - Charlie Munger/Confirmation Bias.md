@@ -33,10 +33,64 @@ This is the cognitive model behind:
 
 Agreed, people will even more be convinced about their beliefs. Can I say it reminds me thinking about voting trump? MAGA? 😅
 
-## [Common Cognitive Biases: A Comprehensive List With Examples](https://www.clearerthinking.org/post/the-list-of-common-cognitive-bias-with-examples)
+---
 
-[Test](https://programs.clearerthinking.org/how_rational_are_you_really_take_the_test.html?_gl=1%2Axg32ki%2A_gcl_au%2AMTIwMjIyNjEzMy4xNzQ4OTc4MzYx%2A_ga%2AMTU4MDUyOTY4OS4xNzQ4OTc4MjQ2%2A_ga_58RPQ2D860%2AczE3NDg5NzgyNDUkbzEkZzEkdDE3NDg5Nzk1MTIkajQ3JGwwJGgw) This test is kind of interesting!
+## [Falsification: How to Destroy Incorrect Ideas](https://fs.blog/peter-cathcart-wason-falsification/)
+
+The only way to test the validity of any theory was to prove it wrong, a process he labeled falsification. And it turns out we’re quite bad at falsification.
+
+>Subjects were told that they would be given a series of three numbers that followed a certain rule known only to the experimenter. Their assignment was to figure out what the rule was, which they could do by offering the experimenter other strings of three numbers and asking him whether or not these new strings met the rule.
+>
+>The string of numbers the subjects were given was quite simple:
+>
+>2-4-6
+>
+>Try it: What’s your first instinct about the rule governing these numbers? And what’s another string you might test with the experimenter in order to find out if your guess is right? If you’re like most people, your first instinct is that the rule is “ascending even numbers” or “numbers increasing by two.” And so you guess something like:
+>
+>8-10-12
+>
+>And the experimenter says, “Yes! That string of numbers also meets the rule.” And your confidence rises. To confirm your brilliance, you test one more possibility, just as due diligence, something like:
+>
+>20-22-24
+>
+>“Yes!” says the experimenter. Another surge of dopamine. And you proudly make your guess: “The rule is: even numbers, ascending in twos.” “No!” says the experimenter. It turns out that the rule is “any ascending numbers.” So 8-10-12 does fit the rule, it’s true, but so does 1-2-3. Or 4-23-512. The only way to win the game is to guess strings of numbers that would prove your beloved hypothesis wrong—and that is something each of us is constitutionally driven to avoid.
+
+We can’t always test by looking for evidence that supports our current idea; instead, we should ask ourselves, **“What evidence would show me I’m wrong?”**
+
+### Investing Example
+
+**Belief:** “This company has a strong competitive advantage.”
+
+- **Confirmation:** You look for news articles praising the company, or you read bullish reports.
+    
+- **Falsification:** You ask, “What would make me question this advantage?”
+    
+    - _Example tests:_
+        
+        - Are competitors gaining market share?
+            
+        - Is the company’s profit margin shrinking compared to peers?
+            
+        - Have key executives left?
+            
+        - Are customers switching to alternatives?
+            
+    - If you find convincing evidence here, it might show your original thesis is wrong.
 
 
+## [Why do we favor our existing beliefs?](https://thedecisionlab.com/biases/confirmation-bias)
 
-https://fs.blog/peter-cathcart-wason-falsification/
+>Confirmation bias is particularly present in the consumption of news and media. The ever-evolving ease of access has allowed the population to personally curate what they consume.
+
+It’s like being trapped in an information cocoon—we keep seeing only what supports our beliefs. That’s why it’s so important to stay open-minded and actively seek out views that challenge us.
+
+#### How it affects product
+>This is confirmation bias at work: if we dislike a celebrity who endorses a product, we are more likely to attend to information that suggests that we will also dislike the product.
+>
+>Consumers will often consult reviews before buying a product – this gives them a good idea of whether or not that item will be useful and valuable. Upon researching, if they are primed with an abundance of positive reviews, they may be likely to seek to confirm information when using it themselves
+
+So true
+
+##### How to avoid it
+
+>Confirmation bias is likely to occur when we are gathering the information needed to make decisions. It is also subconscious; we are unaware of its influence on our decision-making. As such, the first step to avoiding confirmation bias is making ourselves aware of it. Because confirmation bias is most likely to occur early in the decision-making process, we should focus on starting with a neutral fact base. This can be achieved by having multiple objective sources of information.
