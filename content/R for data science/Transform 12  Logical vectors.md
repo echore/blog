@@ -296,3 +296,258 @@ For example: _If a row is missing `dep_time`, is it also missing the other two? 
 
 ---
 ## 12.3 Boolean algebra
+### 12.3.3 `%in%` 
+
+An easy way to avoid the problem of getting your `==`s and `|`s in the right order is to use `%in%`. `x %in% y` returns a logical vector the same length as `x` that is `TRUE` whenever a value in `x` is anywhere in `y` .
+```r
+flights %>% 
+  filter(month %in% c(11,12))
+```
+Note that `%in%` obeys different rules for `NA` to `==`, as `NA %in% NA` is `TRUE`.
+```r
+> c(1,2,NA) %in% (NA)
+[1] FALSE FALSE  TRUE
+> c(1,2,NA) == (NA)
+[1] NA NA NA
+```
+
+### 12.3.4 Exercises
+Assuming that a missing `dep_time` implies that a flight is cancelled, look at the number of cancelled flights per day. Is there a pattern? Is there a connection between the proportion of cancelled flights and the average delay of non-cancelled flights?
+```r
+flights %>% 
+  mutate(
+    cancelled = is.na(dep_time)
+  ) %>% 
+  group_by(year, month, day) %>% 
+  summarise(
+    cancelled_flights = sum(cancelled),
+    total_flights = n(),
+    proportion_cancelled = cancelled_flights / total_flights,
+    avg_dep_delay = mean(dep_delay[!cancelled], na.rm = TRUE) #this is clever
+  ) %>% 
+  ggplot(aes(x = proportion_cancelled, y = avg_dep_delay)) +
+  geom_point() +
+  geom_smooth()
+```
+![[Pasted image 20250617150434.png|Pasted image 20250617150434.png]]
+- Inside a grouped summary, `n()` always counts **rows per group**.
+- If not grouped, `n()` counts all rows in the data.
+-  In the `flights` dataset, **each row is a flight**.
+- So, after you group by day, `n()` gives you **the number of flights that happened (or were scheduled) that day**.
+
+---
+
+## 12.4 Summaries
+### 12.4.1 Logical summaries
+```r
+flights |> 
+  group_by(year, month, day) |> 
+  summarize(
+    all_delayed = all(dep_delay <= 60, na.rm = TRUE),
+    any_long_delay = any(arr_delay >= 300, na.rm = TRUE),
+    .groups = "drop"
+  )
+#> # A tibble: 365 × 5
+#>    year month   day all_delayed any_long_delay
+#>   <int> <int> <int> <lgl>       <lgl>         
+#> 1  2013     1     1 FALSE       TRUE          
+#> 2  2013     1     2 FALSE       TRUE          
+#> 3  2013     1     3 FALSE       FALSE         
+#> 4  2013     1     4 FALSE       FALSE         
+#> 5  2013     1     5 FALSE       TRUE          
+#> 6  2013     1     6 FALSE       FALSE         
+#> # ℹ 359 more rows
+```
+ **a. `all_delayed = all(dep_delay <= 60, na.rm = TRUE)`**
+
+- `all()` checks if **every value in the group** meets a condition.
+    
+- Here, it asks: “Were **all** flights that day delayed by **at most 60 minutes**?”
+    
+    - If **yes** (all flights ≤ 60 min delay), it returns `TRUE`.
+        
+    - If **any flight** that day had a delay > 60 min, it returns `FALSE`.
+        
+- `na.rm = TRUE` tells R to **ignore missing values** when doing this check.
+    
+
+ **b. `any_long_delay = any(arr_delay >= 300, na.rm = TRUE)`**
+
+- `any()` checks if **at least one value in the group** meets a condition.
+    
+- Here, it asks: “Did **any flight** that day arrive at least **300 minutes late** (5 hours)?”
+    
+    - If **yes** (even just one flight), returns `TRUE`.
+        
+    - If **none**, returns `FALSE`.
+        
+- Again, `na.rm = TRUE` ignores missing values.
+    
+
+ **c. `.groups = "drop"`**
+
+- After summarizing, this **removes the groupings** so the result is just a plain data frame.
+
+---
+
+### 12.4.2 Numeric summaries of logical vectors
+```r
+flights |> 
+  group_by(year, month, day) |> 
+  summarize(
+    proportion_delayed = mean(dep_delay <= 60, na.rm = TRUE),
+    count_long_delay = sum(arr_delay >= 300, na.rm = TRUE),
+    .groups = "drop"
+  )
+#> # A tibble: 365 × 5
+#>    year month   day proportion_delayed count_long_delay
+#>   <int> <int> <int>              <dbl>            <int>
+#> 1  2013     1     1              0.939                3
+#> 2  2013     1     2              0.914                3
+#> 3  2013     1     3              0.941                0
+#> 4  2013     1     4              0.953                0
+#> 5  2013     1     5              0.964                1
+#> 6  2013     1     6              0.959                0
+#> # ℹ 359 more rows
+```
+`sum(x)` gives the number of `TRUE`s and `mean(x)` gives the proportion of `TRUE`s (because `mean()` is just `sum()` divided by `length()`).
+
+---
+
+### 12.4.3 Logical subsetting
+```r
+flights %>% 
+  group_by(year, month, day) %>% 
+  summarise(
+    behind = mean(arr_delay > 0,na.rm = TRUE),
+    ahead = mean(arr_delay < 0,na.rm = TRUE),
+    total_number_filights = n(),
+    .groups = 'drop'
+  )
+```
+
+1. **Group by year, month, day**
+
+`group_by(year, month, day)`
+
+- This means: “Look at all flights for each calendar day.”
+
+2. **Summarize:**
+
+**a. behind = mean(arr_delay[arr_delay > 0], na.rm = TRUE)**
+
+- Looks at **all flights that arrived late** (`arr_delay > 0`) for that day.
+    
+- Calculates their **average arrival delay**.
+    
+- `na.rm = TRUE` means any missing values are ignored.
+    
+- **If no flights arrived late that day, the mean will be NA.**
+    
+
+**b. ahead = mean(arr_delay[arr_delay < 0], na.rm = TRUE)**
+
+- Looks at **all flights that arrived early** (`arr_delay < 0`).
+    
+- Calculates their **average "earliness"** (i.e., how early, in minutes, flights arrived).
+    
+- Will be a **negative number** if there are early arrivals.
+    
+- Again, if no flights arrived early, the mean will be NA.
+    
+
+**c. n = n()**
+
+- Counts **total number of flights** that day.
+    
+
+**d. .groups = "drop"**
+
+- Removes groupings in the result (so the output is just a regular data frame).
+
+---
+### 12.4.4 Exercises
+ 1. What will `sum(is.na(x))` tell you? How about `mean(is.na(x))`?
+ 
+ **`mean(is.na(x))`**
+
+- **What does it do?**
+    
+    - Again, `is.na(x)` gives TRUE (1) for NAs, FALSE (0) otherwise.
+        
+    - `mean()` computes the **average value** (sum divided by number of elements).
+        
+- **What does it tell you?**
+    
+    - The **proportion (fraction) of values in `x` that are missing**.
+        
+
+**Example:**
+
+```r
+x <- c(1, 2, NA, 4, NA)
+mean(is.na(x))  # Output: 0.4
+```
+
+> **Interpretation:** 40% of the values in `x` are missing (2 out of 5).
+
+**Summary Table**
+
+|Expression|What it tells you|
+|---|---|
+|`sum(is.na(x))`|Number of missing values in `x`|
+|`mean(is.na(x))`|Proportion (fraction) of missing values in `x`|
+
+---
+## 12.5 Conditional transformations
+### 12.5.2 `case_when()`
+```r
+> x <- c(-3:3, NA)
+> case_when(
++   x == 0 ~ '0',
++   x < 0 ~ '-ve',
++   x > 0 ~ '+ve',
++   is.na(x) ~'xxx'
++ )
+[1] "-ve" "-ve" "-ve" "0"   "+ve" "+ve" "+ve" "xxx"
+> 
+```
+
+Use `.default` if you want to create a “default”/catch all value:
+```r
+case_when(
+  x < 0 ~ '-ve',
+  x > 0 ~ '+ve',
+  .default = 'xxx'
+)
+```
+
+Just like with `if_else()` you can use variables on both sides of the `~` and you can mix and match variables as needed for your problem. For example, we could use `[case_when()]` to provide some human readable labels for the arrival delay:
+```r
+flights |> 
+  mutate(
+    status = case_when(
+      is.na(arr_delay)      ~ "cancelled",
+      arr_delay < -30       ~ "very early",
+      arr_delay < -15       ~ "early",
+      abs(arr_delay) <= 15  ~ "on time",
+      arr_delay < 60        ~ "late",
+      arr_delay < Inf       ~ "very late",
+    ),
+    .keep = "used"
+  )
+```
+
+Write a `case_when()` statement that uses the `month` and `day` columns from `flights` to label a selection of important US holidays (e.g., New Years Day, 4th of July, Thanksgiving, and Christmas). create a character column that either gives the name of the holiday or is `NA`.
+
+```r
+flights <- flights %>% 
+  mutate(
+    holiday = case_when(
+      month == 1 & day == 1 ~ "New Year’s Day",
+      month == 7 & day == 4 ~ "Independence Day",
+      month == 12 & day == 25 ~ "Christmas",
+      .default = 'NA'
+    )
+  )
+```
