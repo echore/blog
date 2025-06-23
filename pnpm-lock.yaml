@@ -217,8 +217,8 @@ importers:
         specifier: ^0.21.4
         version: 0.21.5
       prettier:
-        specifier: ^3.3.0
-        version: 3.3.2
+        specifier: ^3.6.0
+        version: 3.6.0
       tsx:
         specifier: ^4.11.2
         version: 4.15.7
@@ -284,8 +284,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@bufbuild/protobuf@1.10.0':
-    resolution: {integrity: sha512-QDdVFLoN93Zjg36NoQPZfsVH9tZew7wKDKyV5qRdj8ntT4wQCOradQjRaTdwMhWUYsgKsvCINKKm87FdEk96Ag==}
+  '@bufbuild/protobuf@1.10.1':
+    resolution: {integrity: sha512-wJ8ReQbHxsAfXhrf9ixl0aYbZorRuOWpBNzm8pL8ftmSxQx/wnJD5Eg861NwJU/czy2VXFIebCeZnZrI9rktIQ==}
 
   '@citation-js/core@0.7.9':
     resolution: {integrity: sha512-fSbkB32JayDChZnAYC/kB+sWHRvxxL7ibVetyBOyzOc+5aCnjb6UVsbcfhnkOIEyAMoRRvWDyFmakEoTtA5ttQ==}
@@ -1723,8 +1723,8 @@ packages:
   preact@10.22.0:
     resolution: {integrity: sha512-RRurnSjJPj4rp5K6XoP45Ui33ncb7e4H7WiOHVpjbkvqvA3U+N8Z6Qbo0AE6leGYBV66n8EhEaFixvIu3SkxFw==}
 
-  prettier@3.3.2:
-    resolution: {integrity: sha512-rAVeHYMcv8ATV5d508CFdn+8/pHPpXeIid1DdrPwXnaAdH7cqjVbpJaT5eq4yRAFU/lsbwYwSF/n5iNrdJHPQA==}
+  prettier@3.6.0:
+    resolution: {integrity: sha512-ujSB9uXHJKzM/2GBuE0hBOUgC77CN3Bnpqa+g80bkv3T3A93wL/xlzDATHhnhkzifz/UE2SNOvmbTz5hSkDlHw==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -2328,7 +2328,7 @@ snapshots:
   '@biomejs/cli-win32-x64@1.7.3':
     optional: true
 
-  '@bufbuild/protobuf@1.10.0': {}
+  '@bufbuild/protobuf@1.10.1': {}
 
   '@citation-js/core@0.7.9':
     dependencies:
@@ -4023,7 +4023,7 @@ snapshots:
 
   preact@10.22.0: {}
 
-  prettier@3.3.2: {}
+  prettier@3.6.0: {}
 
   pretty-bytes@6.1.1: {}
 
@@ -4323,7 +4323,7 @@ snapshots:
 
   sass-embedded@1.77.5:
     dependencies:
-      '@bufbuild/protobuf': 1.10.0
+      '@bufbuild/protobuf': 1.10.1
       buffer-builder: 0.2.0
       immutable: 4.3.7
       rxjs: 7.8.2
