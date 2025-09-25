@@ -773,3 +773,474 @@ This is close enough to zero, so the algorithm has **converged**.
 - Start with a reasonable guess near the root.
 - Newton–Raphson converges very fast if the function is smooth and well-behaved.
 - Stopping rules are based on how small the update or the function value becomes.
+
+
+
+# Confounding in Regression
+
+---
+
+## 1. What is a confounder?
+
+A **confounder** is a variable that:
+1. Is associated with the **exposure** (predictor \(X\))  
+2. Is a cause (or risk factor) of the **outcome** \(Y\)  
+3. Is **not** on the causal pathway between \(X\) and \(Y\)  
+
+👉 If you don’t adjust for a confounder, the estimated effect of \(X\) on \(Y\) may be **biased**.
+
+---
+
+## 2. Example
+
+- **Exposure (X):** smoking during pregnancy  
+- **Outcome (Y):** low birth weight  
+- **Potential confounder (Z):** mother’s socioeconomic status (SES)  
+
+Why?  
+- SES influences likelihood of smoking (low SES → higher smoking rates).  
+- SES also affects birth weight (low SES → poorer nutrition, worse outcomes).  
+
+If SES is ignored, the smoking effect on birth weight may be overestimated.
+
+---
+
+## 3. Detecting confounding with regression
+
+- **Model 1 (restricted):** outcome ~ exposure  
+- **Model 2 (full):** outcome ~ exposure + confounder  
+
+Compare the coefficient of exposure (\(\hat{\beta}_1\)) between the two models.
+
+---
+
+## 4. Relative Variation (RV)
+
+To measure change:
+
+$$
+RV = \frac{ \left| \hat{\beta}_{model1} - \hat{\beta}_{model2} \right| }{ \left| \hat{\beta}_{model1} \right| }
+$$
+
+- \(\hat{\beta}_{model1}\): exposure effect without confounder  
+- \(\hat{\beta}_{model2}\): exposure effect with confounder  
+
+---
+
+## 5. Thresholds
+
+- If \(RV > 10\%\) or \(20\%\), the variable is considered a **confounder**.  
+- These thresholds are arbitrary but commonly used in epidemiology.
+
+---
+
+## 6. Worked Example
+
+Exposure = smoking → low birth weight  
+- Model 1 (without SES): \(\hat{\beta}_{model1} = 0.40\)  
+- Model 2 (with SES): \(\hat{\beta}_{model2} = 0.30\)  
+
+Compute RV:  
+
+$$
+RV = \frac{|0.40 - 0.30|}{|0.40|} = \frac{0.10}{0.40} = 0.25 = 25\%
+$$
+
+👉 Since 25% > 20%, SES is a **confounder**.
+
+---
+
+## ✅ Key Takeaways
+
+- Confounders distort the estimated relationship between exposure and outcome.  
+- Always test potential confounders by comparing models.  
+- Use RV to quantify confounding (10–20% threshold).  
+
+
+
+
+
+# Likelihood Ratio Test (LRT)
+
+---
+
+## 1. What problem does LRT solve?
+
+We want to test whether some parameters are needed in a model.
+
+- **Null hypothesis (restricted model):**
+$$
+H_0: \theta_1 = \theta_2 = \dots = \theta_p = 0
+$$
+
+- **Alternative hypothesis (full model):**
+$$
+H_1: \text{At least one } \theta_k \neq 0
+$$
+
+So we compare:
+- **Reduced model:** without these parameters.  
+- **Full model:** with these parameters included.  
+
+---
+
+## 2. Likelihoods under each model
+
+- $L(\hat{\theta}_0)$ = maximum likelihood of the reduced model  
+- $L(\hat{\theta}_p)$ = maximum likelihood of the full model  
+
+---
+
+## 3. LRT statistic
+
+The test statistic is:
+$$
+\lambda = -2 \ln \left( \frac{L(\hat{\theta}_0)}{L(\hat{\theta}_p)} \right)
+$$
+
+- If models fit equally well → ratio close to 1 → $\lambda \approx 0$.  
+- If full model fits better → ratio small → $\lambda$ large.  
+
+---
+
+## 4. Distribution under $H_0$
+
+By Wilks’ theorem:
+$$
+\lambda \sim \chi^2(df)
+$$
+
+where:
+- $df =$ difference in number of parameters between full and reduced models.
+
+---
+
+## 5. P-value
+
+Compute:
+$$
+p\text{-value} = P\left(\chi^2_{df} \geq \lambda \right) 
+= 1 - F_{\chi^2_{df}}(\lambda)
+$$
+
+- Small p-value → reject $H_0$ → extra parameters significantly improve the model.
+
+---
+
+## 6. Example
+
+Logistic regression predicting **low birth weight**:
+
+- Reduced model: only maternal age  
+- Full model: age + race + smoking  
+
+Suppose likelihoods are:
+- $L(\hat{\theta}_0) = 0.002$  
+- $L(\hat{\theta}_p) = 0.01$  
+
+Then:
+$$
+\lambda = -2 \ln \left( \frac{0.002}{0.01} \right) 
+= -2 \ln(0.2) = 3.22
+$$
+
+Degrees of freedom: $df = 2$ (two extra predictors).  
+
+Compare with $\chi^2_2$:  
+- $p \approx 0.20$ → not significant.  
+- Interpretation: adding race + smoking does **not** significantly improve the model (in this toy example).
+
+---
+
+## ✅ Key Takeaways
+
+- LRT compares **nested models** (full vs. reduced).  
+- Statistic:
+  $$
+  \lambda = -2 \ln \frac{L(\hat{\theta}_0)}{L(\hat{\theta}_p)}
+  $$
+- Distribution: $\chi^2$ with $df =$ difference in number of parameters.  
+- Small p-value → extra parameters improve model fit.
+
+
+
+
+# Likelihood Ratio Test (LRT): Key Points
+
+---
+
+## 1. Why the **-2** in the formula?
+
+The LRT statistic is:
+
+$$
+\lambda = -2 \ln \left( \frac{L(\hat{\theta}_0)}{L(\hat{\theta}_p)} \right)
+$$
+
+Why the $-2$?
+
+- The raw ratio $\frac{L(\hat{\theta}_0)}{L(\hat{\theta}_p)}$ is always between 0 and 1.  
+- Taking the **log** makes it easier to handle mathematically:  
+
+  $$
+  \ln\left(\frac{L_0}{L_p}\right) = \ln(L_0) - \ln(L_p)
+  $$
+
+- Multiplying by $-2$:  
+  - Ensures the statistic is **positive** when the full model fits better (since $L_p \geq L_0$).  
+  - Matches the chi-square distribution (from likelihood theory).  
+
+👉 Think of the $-2$ as a mathematical scaling that makes the test statistic line up with the chi-square table we use.
+
+---
+
+## 2. Why chi-square distribution under $H_0$?
+
+This comes from **Wilks’ theorem**:
+
+- If the null hypothesis $H_0$ is true, then with large samples:
+
+  $$
+  \lambda \sim \chi^2(df)
+  $$
+
+- Where $df =$ number of restrictions (parameters set to 0 under $H_0$).
+
+👉 Intuition:  
+- The chi-square distribution arises naturally from sums of squared standardized differences.  
+- The LRT statistic measures how far apart the two models are in terms of log-likelihood.  
+- Under $H_0$, that “distance” behaves like a chi-square variable.
+
+---
+
+## 3. The p-value
+
+Once you compute $\lambda$, you ask:  
+*“If the null is true, how extreme is this $\lambda$ value?”*
+
+Formally:
+
+$$
+p\text{-value} = P\left( \chi^2_{df} \geq \lambda \right)
+$$
+
+That means:
+
+- Look up your test statistic $\lambda$ in a chi-square distribution with the right degrees of freedom.  
+- If it’s **very large** (far in the tail) → p-value is small → evidence against $H_0$.  
+- If it’s small → p-value is big → data are consistent with $H_0$.  
+
+---
+
+## 4. Quick Example
+
+Suppose:
+
+- $L_0 = 0.002$, $L_p = 0.01$.  
+
+Then:
+
+$$
+\lambda = -2 \ln\left(\frac{0.002}{0.01}\right) 
+= -2 \ln(0.2) 
+= 3.22
+$$
+
+If $df = 2$, check $\chi^2(2)$:
+
+- 95% cutoff ≈ 5.99.  
+- Our value $3.22 < 5.99$ → $p > 0.05$.  
+
+**Interpretation:** No significant improvement by adding extra parameters.
+
+---
+
+## ✅ In plain words
+
+1. **-2 log ratio** → makes the statistic positive and chi-square compatible.  
+2. **Chi-square under $H_0$** → Wilks’ theorem: model-fit distance follows $\chi^2$.  
+3. **p-value** → probability of seeing a test statistic this big if $H_0$ were true.  
+
+
+
+# Wald Test
+
+---
+
+## 1. Purpose
+
+The **Wald test** is used to check whether one (or several) parameters in a regression model are significantly different from a hypothesized value (usually 0).
+
+- Null hypothesis:
+$$
+H_0: \theta = \theta_0
+$$
+- Alternative:
+$$
+H_1: \theta \neq \theta_0
+$$
+
+---
+
+## 2. One-parameter case
+
+For a single parameter estimate $\hat{\theta}$:
+
+$$
+W = \frac{\hat{\theta} - \theta_0}{SE(\hat{\theta})}
+$$
+
+- If $H_0$ is true, then:
+  $$
+  W \sim N(0,1) \quad \text{(large samples)}
+  $$
+
+- Equivalently:
+  $$
+  W^2 \sim \chi^2(1)
+  $$
+
+👉 Interpretation:  
+$W$ is just a **z-score** = how many standard errors the estimate is away from the null value.
+
+---
+
+## 3. Multiple-parameter case
+
+Suppose we want to test several coefficients at once, e.g. $H_0: \beta_2 = \beta_3 = 0$.
+
+The Wald statistic becomes:
+
+$$
+W = (\hat{\theta} - \theta_0)^T \big[ Var(\hat{\theta}) \big]^{-1} (\hat{\theta} - \theta_0)
+$$
+
+- $\hat{\theta}$ = vector of parameter estimates  
+- $Var(\hat{\theta})$ = covariance matrix of estimates  
+- Degrees of freedom $df =$ number of tested parameters  
+
+Then:
+$$
+W \sim \chi^2(df)
+$$
+
+👉 Example: If 2 parameters are tested, then $W \sim \chi^2(2)$.
+
+---
+
+## 4. Example: Smoking coefficient
+
+Suppose logistic regression gives:
+
+- Smoking coefficient: $\hat{\beta} = 0.40$  
+- Standard error: $SE = 0.15$  
+
+Compute Wald statistic:
+
+$$
+W = \frac{0.40}{0.15} = 2.67
+$$
+
+Now:
+
+- Under $H_0$, $W \sim N(0,1)$  
+- So we ask: *how extreme is 2.67 in a standard normal?*
+
+From z-tables/software:
+
+- $P(Z > 2.67) \approx 0.0038$  
+- Two-sided test: $p = 2 \times 0.0038 = 0.0076 \approx 0.008$
+
+---
+
+## ✅ Key Takeaways
+
+- Wald test compares estimate to its standard error.  
+- **One parameter:** $W \sim N(0,1)$ → or $W^2 \sim \chi^2(1)$.  
+- **Multiple parameters:** Wald statistic $\sim \chi^2(df)$.  
+- Easy to compute, but can be less reliable than Likelihood Ratio Test in small or boundary cases.
+
+
+
+# Score Test (a.k.a. Lagrange Multiplier Test)
+
+---
+
+## 1. Purpose
+
+The **Score test** checks whether a parameter is significantly different from a null value (often 0) **without fitting the full model**.
+
+- Null hypothesis:
+$$
+H_0: \theta = \theta_0
+$$
+- Alternative hypothesis:
+$$
+H_1: \theta \neq \theta_0
+$$
+
+---
+
+## 2. Key Ingredients
+
+1. **Score function** (first derivative of log-likelihood):
+$$
+U(\theta) = \frac{\partial \ell(\theta)}{\partial \theta}
+$$
+- Measures the slope of the log-likelihood at $\theta$.
+- If $U(\theta_0) = 0$, the data do not push us away from $H_0$.
+- If $U(\theta_0)$ is far from 0, the data suggest moving away from $H_0$.
+
+2. **Fisher information** (expected curvature of log-likelihood):
+$$
+I(\theta) = -E\!\left[ \frac{\partial^2 \ell(\theta)}{\partial \theta^2} \right]
+$$
+- Measures how much information the data contain about $\theta$.
+- Think of it as the “expected precision” of the slope.
+
+---
+
+## 3. Score Test Statistic
+
+For one parameter:
+$$
+S = \frac{U(\theta_0)^2}{I(\theta_0)}
+$$
+
+- Numerator: squared slope of the log-likelihood at $\theta_0$.  
+- Denominator: expected variability of that slope.  
+- Intuition: **signal-to-noise ratio**.  
+
+Under $H_0$:
+$$
+S \sim \chi^2(1)
+$$
+
+For multiple parameters:
+$$
+S = U(\theta_0)^T I(\theta_0)^{-1} U(\theta_0) \sim \chi^2(df)
+$$
+- $df$ = number of tested parameters.  
+
+---
+
+## 4. Intuition
+
+- If $H_0$ is true, the slope at $\theta_0$ should be close to 0.  
+- If the slope is steep at $\theta_0$, the log-likelihood is "pushing" us toward another value → evidence against $H_0$.  
+- Large $S$ = strong evidence against $H_0$.  
+
+👉 In plain words:
+$$
+\text{Score test} = \frac{\text{Observed slope at null}^2}{\text{Expected slope variation}}
+$$
+
+---
+
+## 5. Comparison to Wald & LRT
+
+- **Wald test**: needs full model (estimate + SE).  
+- **Likelihood Ratio Test (LRT)**: needs both null and full model.  
+- **Score test**: only needs null model (computationally cheaper).  
+
+In large samples, all three give similar results.
