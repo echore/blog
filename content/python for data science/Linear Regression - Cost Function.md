@@ -3,42 +3,84 @@ share: true
 ---
 2025-10-04  11:20
 Tags:
-# Cost Function (in Machine Learning / Regression)
+# Linear Regression and the Cost Function
 
-## What is a Cost Function?
+## 1. Prediction Function (Hypothesis)
 
-- A **cost function** (sometimes called a "loss function") tells us **how bad our model is**.  
-- It measures the difference between the model’s predictions $\hat{y}$ and the actual values $y$.  
-- The smaller the cost function, the better the model fits the data.  
-- Training a model = **finding parameters (like $\alpha, \beta$) that minimize the cost function**.
+We assume $y$ can be predicted as a **linear combination of inputs**:
+
+$$
+\hat{y} = \sum_{i=0}^n \beta_i x_i
+$$
+
+- $\hat{y}$ = predicted value  
+- $x_i$ = input features (with $x_0 = 1$ for the intercept term)  
+- $\beta_i$ = parameters (weights) we want to learn  
 
 ---
 
-## Linear Regression
+## 2. Error (Residual)
 
-We predict $y$ from $x$ with a line:
-
-$$
-\hat{y}_i = \alpha + \beta x_i
-$$
-
-The **residual** for each point is:
+For each data point $j$, the error is:
 
 $$
-\varepsilon_i = y_i - \hat{y}_i
+\text{error}^j = y^j - \hat{y}^j
 $$
 
-The cost function is the **sum of squared errors (SSE)**:
+- $y^j$ = actual value  
+- $\hat{y}^j$ = predicted value  
+
+---
+
+## 3. Cost Function (Squared Error)
+
+We want to measure how "bad" our predictions are.  
+So we square the errors and average them:
+
+**Mean Squared Error (MSE):**
 
 $$
-J(\alpha, \beta) = \sum_{i=1}^n (y_i - \hat{y}_i)^2
+\frac{1}{m} \sum_{j=1}^m \left( y^j - \hat{y}^j \right)^2
 $$
 
-or equivalently:
+where $m$ = number of rows (data points).  
+
+To make derivative math cleaner, we add $\tfrac{1}{2}$:
+
+**Cost function:**
 
 $$
-J(\alpha, \beta) = \sum_{i=1}^n (y_i - (\alpha + \beta x_i))^2
+J(\beta) = \frac{1}{2m} \sum_{j=1}^m \left( y^j - \hat{y}^j \right)^2
 $$
 
 ---
 
+## 4. Why the 1/2m Factor?
+
+- Dividing by $m$ gives us the **average** error.  
+- The $\tfrac{1}{2}$ is just for **convenience**:  
+  when we differentiate, the "2" from squaring cancels out.
+
+---
+
+## 5. Minimization via Calculus
+
+We want to minimize $J(\beta)$.  
+From calculus: **take derivative, set = 0**.
+
+Gradient for parameter $\beta_k$:
+
+$$
+\frac{\partial J}{\partial \beta_k} 
+= \frac{1}{m} \sum_{j=1}^m \left( y^j - \sum_{i=0}^n \beta_i x_i^j \right)(-x_k^j)
+$$
+
+
+---
+
+## Intuition
+
+1. Prediction: draw a line $\hat{y} = \alpha + \beta x$.  
+2. Error: check how far actual points are from the line.  
+3. Cost function: square errors, average them → get a "badness score".  
+4. Gradient descent: follow the slope downhill to find the best line.
