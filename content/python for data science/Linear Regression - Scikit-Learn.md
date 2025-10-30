@@ -110,7 +110,7 @@ _ = sp.stats.probplot(test_residual,plot=ax)
 
 ---
 
-## 8️⃣ Retrain on Full Data (Optional)
+## Retrain on Full Data 
 
 After confirming model performance:
 
@@ -119,39 +119,32 @@ final_model = LinearRegression()
 final_model.fit(X, y)
 ```
 
-> This uses all data for the final version of the model before deployment.
+This uses all data for the final version of the model before deployment.
 
 ---
 
-## 9️⃣ Interpreting Coefficients
+##  Coefficients
 
 ```python
-coeff_df = pd.DataFrame(final_model.coef_, X.columns, columns=['Coefficient'])
+final_model.coef_
 ```
-
-|Feature|Coefficient|Interpretation|
-|---|---|---|
-|TV|+0.045|+$1000 in TV ads → +45 sales units|
-|Radio|+0.188|+$1000 in Radio ads → +188 sales units|
-|Newspaper|−0.001|Effect ≈ 0 (no real influence)|
-
-> Always interpret coefficients _holding other variables constant._
+`array([ 0.04576465, 0.18853002, -0.00103749])`
+* Holding all other features fixed, a 1 unit (A thousand dollars) increase in TV Spend is associated with an increase in sales of 0.045 "sales units", in this case 1000s of units .
 
 ---
 
-## 🔟 Making Predictions
+## Making Predictions
 
 ```python
 campaign = [[149, 22, 12]]
 final_model.predict(campaign)
 ```
 
-> Output = expected sales (in 1000 units).  
-> Model cannot tell certainty — only prediction based on past patterns.
+dataset from outside to make new predictions
 
 ---
 
-## 11️⃣ Saving & Loading Models
+## Saving & Loading Models
 
 ```python
 from joblib import dump, load
@@ -164,56 +157,16 @@ Useful for deployment or reusing trained models later.
 
 ---
 
-## 12️⃣ Summary Table
+##  Summary Table
 
-|Step|Purpose|Key Function|
-|---|---|---|
-|Split data|Prevent overfitting|`train_test_split`|
-|Train model|Learn parameters|`LinearRegression().fit()`|
-|Predict|Generate output|`.predict()`|
-|Evaluate|Measure accuracy|`mean_absolute_error`, `mean_squared_error`|
-|Analyze residuals|Check assumptions|`sns.displot`, `sp.stats.probplot`|
-|Save model|Reuse/deploy|`joblib.dump()`|
-
----
-
-## 13️⃣ Concept Check
-
-✅ Linear regression assumes:
-
-- Linearity
-    
-- Independence
-    
-- Homoscedasticity (equal variance of residuals)
-    
-- Normal residuals
-    
-- No multicollinearity
-    
+| Step              | Purpose             | Key Function                                |
+| ----------------- | ------------------- | ------------------------------------------- |
+| Split data        | Prevent overfitting | `train_test_split`                          |
+| Train model       | Learn parameters    | `LinearRegression().fit()`                  |
+| Predict           | Generate output     | `.predict()`                                |
+| Evaluate          | Measure accuracy    | `mean_absolute_error`, `mean_squared_error` |
+| Analyze residuals | Check assumptions   | `sns.displot`, `sp.stats.probplot`          |
+| Save model        | Reuse/deploy        | `joblib.dump()`                             |
 
 ---
 
-## 🧠 Key Takeaways
-
-- **Don’t train on test data.** Always evaluate on unseen data.
-    
-- **RMSE** is often the most interpretable metric.
-    
-- **Residual plots** reveal violations of assumptions.
-    
-- **Coefficients** must be interpreted in context of feature scales.
-    
-- **Newspaper ads ≈ noise variable → maybe drop or regularize later.**
-    
-
----
-
-## 🧩 Up Next
-
-→ Learn **Regularization** (Ridge, Lasso, ElasticNet)  
-to handle overfitting & feature importance in more complex models.
-
----
-
-Would you like me to make a **second page** with **visual summaries (graphs + code interpretation)** — so you can have both conceptual and visual sections for Obsidian?
