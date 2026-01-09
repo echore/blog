@@ -4,13 +4,15 @@ share: true
 2026-01-08  21:19
 Tags:[[Money|Money]]
 
+## To summarize in one sentence:
+
+I learned an incredible amount in short time: how to create products and services, how sales and marketing actually work, how to set reasonable prices, how to learn from others, how to outsource tasks, and how to collaborate with others. Honestly, I could talk about this experience for a long time.
+
 ---
 
 ## The Experience and the Story
 
 **December 2024** was when my journey really began.
-
-I learned an incredible amount in short time: how to create products and services, how sales and marketing actually work, how to outsource tasks, and how to collaborate with others. Honestly, I could talk about this experience for a long time.
 
 I started running my own social media account for a very simple reason: I wanted some extra income. At that time, I had just arrived in Canada and was trying to adapt — or, more accurately, to survive 😂. Everything felt expensive. Coming from China, I was used to thinking in RMB, and with the exchange rate being roughly 1 CAD = 5 RMB, my brain automatically multiplied every price by five. I even wished RMB were “stronger.” Only later did I realize that a high exchange rate doesn’t mean pure benefits. Back then, I knew almost nothing about economics 🫨.
 
