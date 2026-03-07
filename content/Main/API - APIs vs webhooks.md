@@ -229,7 +229,7 @@ When someone pushes code:
 push event
 ```
 
-GitHub sends a webhook to a CI/CD system.
+GitHub sends a webhook to a [[CI CD|CI CD]] CI/CD system.
 
 Example workflow:
 
