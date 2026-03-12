@@ -433,7 +433,7 @@ Meaning those features were **removed**.
 
 ---
 
-# 11. Elastic Net
+# 11. [[Elastic Net|Elastic Net]]
 
 Elastic Net mixes L1 and L2 penalties.
 
